@@ -12,3 +12,6 @@ docker compose up -d
 The `-d` flag will run the container in the background.
 
 The variables present in the compose files `${VARIABLE}` use environment variables defined in `.env` file in the root directory of the `docker-compose.yml` or, if using `Portainer`, it uses environment variables defined on the Stack itself.
+
+# Note
+Compose files might contain a `Required with Traefik` section, this is only required if using `Traefik` as reverse proxy, so you can delete this parts if not using it.
