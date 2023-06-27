@@ -21,4 +21,4 @@ There are two containers that shouldn't be runned from within `Portainer`, and s
 `Traefik` because, since it works as a reverse proxy and points to services, it needs to be running to access services like `Portainer`.
 
 ## Required with Traefik
-Compose files might contain a `Required with Traefik` section, this is only required if using `Traefik` as reverse proxy, so you can delete this parts if not using it and uncomment the commented ports to expose the container ports on the host.
+Compose files might contain a `Required with Traefik` section, this is only required if using `Traefik` as reverse proxy, so you can delete this parts if not using it and uncomment the commented ports to expose the container ports on the host (you may need to change the host port because some containers use matching ports).
