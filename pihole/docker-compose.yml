@@ -29,8 +29,8 @@ services:
     # dns:
       # - 127.0.0.1
 # Required for Traefik
-    networks:
-      - proxy
+    #networks:
+      #- proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pihole.entrypoints=https"
@@ -38,10 +38,10 @@ services:
       - "traefik.http.routers.pihole.tls=true"
       - "traefik.http.routers.pihole.service=pihole"
       - "traefik.http.services.pihole.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
-networks:
-  proxy:
-    external: true
+      #- "traefik.docker.network=proxy"
+#networks:
+  #proxy:
+    #external: true
 # Required for Traefik
 volumes:
   etc:
