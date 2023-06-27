@@ -3,7 +3,7 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
-    ports:
+    # ports:
       # - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro

@@ -3,7 +3,7 @@ services:
   speedtest-tracker:
     image: ghcr.io/alexjustesen/speedtest-tracker:latest
     container_name: speedtest-tracker
-    ports:
+    # ports:
       # - 80:80
     volumes:
       - config:/config

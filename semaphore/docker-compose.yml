@@ -3,7 +3,7 @@ services:
   semaphore:
     image: semaphoreui/semaphore:latest
     container_name: semaphore
-    ports:
+    # ports:
       # - 3000:3000
     volumes:
       - data:/var/lib/semaphore
