@@ -1,0 +1,33 @@
+version: "3"
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8080:8080/tcp"
+    volumes:
+      - etc:/etc/pihole
+      - dnsmasq:/etc/dnsmasq.d
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      - WEB_PORT=8080
+      - WEBPASSWORD=${LOGIN_PWD}
+      - DNSMASQ_USER=root
+      - PIHOLE_DNS_=1.1.1.1
+      # - DNSMASQ_LISTENING=all
+      # - DHCP_ACTIVE=true
+      # - DHCP_START=192.168.1.2
+      # - DHCP_END=192.168.1.200
+      # - DHCP_ROUTER=192.168.1.1
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    dns:
+      - 127.0.0.1
+volumes:
+  etc:
+  dnsmasq:
