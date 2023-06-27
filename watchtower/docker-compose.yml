@@ -1,0 +1,16 @@
+version: "3.1"
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=${TZ}
+      - WATCHTOWER_MONITOR_ONLY=true
+      # - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_SCHEDULE=0 0 0 * * SUN
+      - WATCHTOWER_NOTIFICATION_URL=${DISCORD_URL}

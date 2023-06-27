@@ -1,0 +1,33 @@
+version: "2.1"
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      # - 8080:8080
+    volumes:
+      - config:/config
+      - downloads:/downloads
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+# Required for Traefik
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbit.entrypoints=https"
+      - "traefik.http.routers.qbit.rule=Host(${HTTP_HOST})"
+      - "traefik.http.routers.qbit.tls=true"
+      - "traefik.http.routers.qbit.service=qbit"
+      - "traefik.http.services.qbit.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external: true
+# Required for Traefik
+volumes:
+  config:
+  downloads:

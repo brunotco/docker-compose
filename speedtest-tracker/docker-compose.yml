@@ -1,0 +1,29 @@
+version: "3.3"
+services:
+  speedtest-tracker:
+    image: ghcr.io/alexjustesen/speedtest-tracker:latest
+    container_name: speedtest-tracker
+    ports:
+      # - 80:80
+    volumes:
+      - config:/config
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+# Required for Traefik
+    networks:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speedtest.entrypoints=https"
+      - "traefik.http.routers.speedtest.rule=Host(${HTTP_HOST})"
+      - "traefik.http.routers.speedtest.tls=true"
+      - "traefik.http.routers.speedtest.service=speedtest"
+      - "traefik.http.services.speedtest.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external: true
+# Required for Traefik
+volumes:
+  config:

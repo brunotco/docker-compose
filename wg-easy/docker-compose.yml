@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  wg-easy:
+    image: weejewel/wg-easy:latest
+    container_name: wg-easy
+    ports:
+      - "51820:51820/udp"
+      # - "51821:51821/tcp"
+    volumes:
+      - config:/etc/wireguard
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - WG_HOST=${EXTERNAL_HOST}
+      - PASSWORD=${LOGIN_PWD}
+      - WG_PORT=51820
+      - WG_DEFAULT_ADDRESS=10.8.0.x
+      - WG_DEFAULT_DNS=${DNS}
+      - WG_ALLOWED_IPS=${ALLOWED_IPS}
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+# Required for Traefik
+    networks:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wireguard.entrypoints=https"
+      - "traefik.http.routers.wireguard.rule=Host(${HTTP_HOST})"
+      - "traefik.http.routers.wireguard.tls=true"
+      - "traefik.http.routers.wireguard.service=wireguard"
+      - "traefik.http.services.wireguard.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external: true
+# Required for Traefik
+volumes:
+  config:
