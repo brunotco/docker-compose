@@ -1,0 +1,21 @@
+version: "X"
+services:
+  ${SERVICE}:
+    image: ${IMAGE} # Docker image
+    container_name: ${CONTAINER} # Container name
+    ports: # Exposes ports on host
+      - ${HOST_PORT}:${CONTAINER_PORT}/{PROTOCOL}
+    volumes: # Map persistent storage
+      - ${PERSISTENT}:/{PATH}
+    restart: unless-stopped # Restart policy
+    environment: # Define env variables
+      - ${VARIABLE}=${VALUE}
+    networks: # Define networks
+      - ${NETWORK}
+# Networks that the container uses
+networks:
+  ${NETWORK}:
+    external: true
+# Volumes that the container uses
+volumes:
+  ${PERSISTENT}:
