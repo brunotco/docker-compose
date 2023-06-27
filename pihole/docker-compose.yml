@@ -7,7 +7,7 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
-      - "8080:8080/tcp"
+      # - "8080:8080/tcp"
     volumes:
       - etc:/etc/pihole
       - dnsmasq:/etc/dnsmasq.d
@@ -28,6 +28,21 @@ services:
       - NET_ADMIN
     # dns:
       # - 127.0.0.1
+# Required for Traefik
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.entrypoints=https"
+      - "traefik.http.routers.pihole.rule=Host(${HTTP_HOST})"
+      - "traefik.http.routers.pihole.tls=true"
+      - "traefik.http.routers.pihole.service=pihole"
+      - "traefik.http.services.pihole.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external: true
+# Required for Traefik
 volumes:
   etc:
   dnsmasq:
