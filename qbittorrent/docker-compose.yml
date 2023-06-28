@@ -9,7 +9,7 @@ services:
       # - 8080:8080
     volumes:
       - config:/config
-      - downloads:/downloads
+      - ${DOWNLOAD_FOLDER}:/downloads
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -33,4 +33,3 @@ networks:
 # Required for Traefik
 volumes:
   config:
-  downloads:
