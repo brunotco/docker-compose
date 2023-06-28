@@ -13,6 +13,9 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+    environment:
+      - PUID=${PUID}
+      - PGID=${GUID}
 # Required for Traefik
     networks:
       - proxy
