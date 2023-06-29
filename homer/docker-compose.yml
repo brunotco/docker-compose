@@ -1,11 +1,15 @@
 version: "2"
 services:
   homer:
-    image: b4bz/homer
+    image: b4bz/homer:latest
     container_name: homer
-    restart: unless-stopped
+    # ports:
+      # - 8080:8080
     volumes:
       - assets:/www/assets
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
 # Required for Traefik
     networks:
       proxy:
