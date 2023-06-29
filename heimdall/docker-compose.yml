@@ -1,13 +1,17 @@
 version: "3.1"
 services:
   heimdall:
-    image: linuxserver/heimdall
+    image: linuxserver/heimdall:latest
     container_name: heimdall
-    environment:
-      - TZ=${TZ}
+    # ports:
+      # - 80:80
     volumes:
       - config:/config
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=${TZ}
 # Required for Traefik
     networks:
       proxy:
