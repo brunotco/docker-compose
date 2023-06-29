@@ -1,0 +1,27 @@
+version: "3.1"
+services:
+  heimdall:
+    image: linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - config:/config
+    restart: unless-stopped
+# Required for Traefik
+    networks:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.heimdall.entrypoints=https"
+      - "traefik.http.routers.heimdall.rule=Host(${HTTP_HOST})"
+      - "traefik.http.routers.heimdall.tls=true"
+      - "traefik.http.routers.heimdall.service=heimdall"
+      - "traefik.http.services.heimdall.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external: true
+# Required for Traefik
+volumes:
+  config:
