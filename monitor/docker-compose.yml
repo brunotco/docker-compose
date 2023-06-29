@@ -1,0 +1,102 @@
+# It's a work still in progress
+# Doing some testing and creating a dashboard
+version: "3"
+services:
+  cadvisor:
+    command:
+    - '--docker_only=true'
+    - '--housekeeping_interval=30s'
+    - '--disable_metrics=accelerator,cpu_topology,disk,memory_numa,tcp,udp,percpu,sched,process,hugetlb,referenced_memory,resctrl,cpuset,advtcp,memory_numa'
+    - '--store_container_labels=false'
+    - '--event_storage_event_limit=default=0'
+    - '--event_storage_age_limit=default=0'
+    container_name: rpimonitor-cadvisor
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    expose:
+      - 8080
+    image: zcube/cadvisor:latest
+    ipc: shareable
+    networks:
+      - rpimonitor
+    privileged: true
+    restart: unless-stopped
+    security_opt:
+      - label=disable
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      
+  grafana:
+    container_name: rpimonitor-grafana
+
+    image: grafana/grafana:latest
+    networks:
+      - rpimonitor
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitor.entrypoints=https"
+      - "traefik.http.routers.monitor.rule=Host(`monitor.mako.pt`)"
+      - "traefik.http.routers.monitor.tls=true"
+      - "traefik.http.routers.monitor.service=monitor"
+      - "traefik.http.services.monitor.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
+    expose:
+      - 3000
+    restart: unless-stopped
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - grafana_config:/etc/grafana
+
+  node-exporter:
+    container_name: rpimonitor-node-exporter
+    expose:
+      - 9100
+    ports:
+      - "9100:9100"
+    image: prom/node-exporter:latest
+    networks:
+      - rpimonitor
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+  prometheus:
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-15d}'
+    container_name: rpimonitor-prometheus
+    expose:
+      - 9090
+    ports:
+      - "9090:9090"
+    image: prom/prometheus:latest
+    user: root
+    networks:
+      - rpimonitor
+    restart: unless-stopped
+    volumes:
+      - prometheus_data:/prometheus
+      - prometheus_config:/etc/prometheus/
+    links:
+      - cadvisor:cadvisor
+      - node-exporter:node-exporter
+
+networks:
+  rpimonitor:
+    external: true
+  proxy:
+    external: true
+  
+volumes:
+  grafana_data:
+  grafana_config:
+  prometheus_data:
+  prometheus_config:
