@@ -18,7 +18,6 @@ services:
     environment:
       - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
       - CF_DNS_API_TOKEN=${CLOUDFLARE_TOKEN}
-      - DOCKER_HOST=${SOCKET}
 # Required for Traefik and Socket
     networks:
       - proxy

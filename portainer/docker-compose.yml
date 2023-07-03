@@ -11,6 +11,7 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+    command: -H tcp://socket-proxy:2375
 # Required for Traefik and Socket
     networks:
       - proxy

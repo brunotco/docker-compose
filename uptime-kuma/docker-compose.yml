@@ -11,8 +11,6 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    environment:
-      - DOCKER_HOST=${SOCKET}
 # Required for Traefik and Socket
     networks:
       - proxy
