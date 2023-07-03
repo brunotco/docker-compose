@@ -11,7 +11,8 @@ services:
       # - /var/run/docker.sock:/var/run/docker.sock:ro
       #- ./data/traefik.yml:/traefik.yml:ro
       - ./data/acme.json:/acme.json
-      - ./data/config.yml:/config.yml:ro
+      - ./data/rules:/rules
+      #- ./data/config.yml:/config.yml:ro
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -31,9 +32,9 @@ services:
       - --providers.docker.endpoint=tcp://socket-proxy:2375
       - --providers.docker.exposedByDefault=false
       - --providers.docker.network=proxy
-      - --providers.file.filename=/config.yml
-      #- --providers.file.directory=/rules
-      #- --providers.file.watch=true
+      #- --providers.file.filename=/config.yml
+      - --providers.file.directory=/rules
+      - --providers.file.watch=true
       - --certificatesResolvers.cloudflare.acme.email=${CLOUDFLARE_EMAIL}
       - --certificatesResolvers.cloudflare.acme.storage=/acme.json
       - --certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare
