@@ -15,3 +15,10 @@ services:
       - WATCHTOWER_SCHEDULE=0 0 0 * * SUN
       - WATCHTOWER_NOTIFICATION_URL=${NOTIFICATION_URL}
       - DOCKER_HOST=${DOCKER_HOST}
+# Required for Socket
+    networks:
+      socket:
+networks:
+  socket:
+    external: true
+# Required for Socket
