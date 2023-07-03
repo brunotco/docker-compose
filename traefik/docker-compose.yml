@@ -9,7 +9,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       # - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./data/traefik.yml:/traefik.yml:ro
+      #- ./data/traefik.yml:/traefik.yml:ro
       - ./data/acme.json:/acme.json
       - ./data/config.yml:/config.yml:ro
     restart: unless-stopped
@@ -18,21 +18,44 @@ services:
     environment:
       - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
       - CF_DNS_API_TOKEN=${CLOUDFLARE_TOKEN}
+    command:
+      - --api=true
+      - --api.dashboard=true
+      - --entryPoints.http.address=:80
+      - --entryPoints.http.http.redirections.entryPoint.to=https
+      - --entryPoints.http.http.redirections.entryPoint.scheme=https
+      - --entryPoints.https.address=:443
+      - --entrypoints.https.http.tls.certresolver=cloudflare
+      - --entrypoints.https.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.https.http.tls.domains[0].sans=*.${DOMAIN}
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=proxy
+      - --providers.file.filename=/config.yml
+      #- --providers.file.directory=/rules
+      #- --providers.file.watch=true
+      - --certificatesResolvers.cloudflare.acme.email=${CLOUDFLARE_EMAIL}
+      - --certificatesResolvers.cloudflare.acme.storage=/acme.json
+      - --certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare
+      - --certificatesResolvers.cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
 # Required for Traefik and Socket
     networks:
       - proxy
       - socket
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_LOGIN}"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      #- "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      # HTTP Routers
       - "traefik.http.routers.traefik.entrypoints=https"
       - "traefik.http.routers.traefik.rule=Host(${HTTP_HOST})"
+      # Middlewares
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_LOGIN}"
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
-      - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
-      - "traefik.http.routers.traefik.tls.domains[0].main=${DOMAIN}"
-      - "traefik.http.routers.traefik.tls.domains[0].sans=*.${DOMAIN}"
+      #- "traefik.http.routers.traefik.tls=true"
+      #- "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+      #- "traefik.http.routers.traefik.tls.domains[0].main=${DOMAIN}"
+      #- "traefik.http.routers.traefik.tls.domains[0].sans=*.${DOMAIN}"
+      # HTTP Services - API
       - "traefik.http.routers.traefik.service=api@internal"
 networks:
   proxy:
