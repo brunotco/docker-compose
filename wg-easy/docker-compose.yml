@@ -29,12 +29,12 @@ services:
       proxy:
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.wireguard.entrypoints=https"
       - "traefik.http.routers.wireguard.rule=Host(${HTTP_HOST})"
-      - "traefik.http.routers.wireguard.tls=true"
+      # HTTP Services
       - "traefik.http.routers.wireguard.service=wireguard"
       - "traefik.http.services.wireguard.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
 networks:
   proxy:
     external: true

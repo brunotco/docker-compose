@@ -17,12 +17,12 @@ services:
       - socket
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.uptime.entrypoints=https"
       - "traefik.http.routers.uptime.rule=Host(${HTTP_HOST})"
-      - "traefik.http.routers.uptime.tls=true"
+      # HTTP Services
       - "traefik.http.routers.uptime.service=uptime"
       - "traefik.http.services.uptime.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
 networks:
   proxy:
     external: true

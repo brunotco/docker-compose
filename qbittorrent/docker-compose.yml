@@ -18,12 +18,12 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.qbit.entrypoints=https"
       - "traefik.http.routers.qbit.rule=Host(${HTTP_HOST})"
-      - "traefik.http.routers.qbit.tls=true"
+      # HTTP Services
       - "traefik.http.routers.qbit.service=qbit"
       - "traefik.http.services.qbit.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
 networks:
   proxy:
     external: true

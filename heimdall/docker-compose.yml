@@ -17,12 +17,12 @@ services:
       proxy:
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.heimdall.entrypoints=https"
       - "traefik.http.routers.heimdall.rule=Host(${HTTP_HOST})"
-      - "traefik.http.routers.heimdall.tls=true"
+      # HTTP Services
       - "traefik.http.routers.heimdall.service=heimdall"
       - "traefik.http.services.heimdall.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
 networks:
   proxy:
     external: true

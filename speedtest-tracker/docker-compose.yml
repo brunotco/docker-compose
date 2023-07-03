@@ -15,12 +15,12 @@ services:
       proxy:
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.speedtest.entrypoints=https"
       - "traefik.http.routers.speedtest.rule=Host(${HTTP_HOST})"
-      - "traefik.http.routers.speedtest.tls=true"
+      # HTTP Services
       - "traefik.http.routers.speedtest.service=speedtest"
       - "traefik.http.services.speedtest.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
 networks:
   proxy:
     external: true

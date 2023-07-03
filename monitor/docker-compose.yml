@@ -39,12 +39,12 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.monitor.entrypoints=https"
       - "traefik.http.routers.monitor.rule=Host(`monitor.mako.pt`)"
-      - "traefik.http.routers.monitor.tls=true"
+      # HTTP Services
       - "traefik.http.routers.monitor.service=monitor"
       - "traefik.http.services.monitor.loadbalancer.server.port=3000"
-      - "traefik.docker.network=proxy"
     expose:
       - 3000
     restart: unless-stopped

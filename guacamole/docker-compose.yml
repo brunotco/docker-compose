@@ -17,12 +17,12 @@ services:
       proxy:
     labels:
       - "traefik.enable=true"
+      # HTTP Routers
       - "traefik.http.routers.guacamole.entrypoints=https"
       - "traefik.http.routers.guacamole.rule=Host(${HTTP_HOST})"
-      - "traefik.http.routers.guacamole.tls=true"
+      # HTTP Services
       - "traefik.http.routers.guacamole.service=guacamole"
       - "traefik.http.services.guacamole.loadbalancer.server.port=${HTTP_PORT}"
-      - "traefik.docker.network=proxy"
 networks:
   proxy:
     external: true
