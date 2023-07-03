@@ -14,7 +14,7 @@ services:
       # - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_SCHEDULE=0 0 0 * * SUN
       - WATCHTOWER_NOTIFICATION_URL=${NOTIFICATION_URL}
-      - DOCKER_HOST=${DOCKER_HOST}
+      - DOCKER_HOST=${SOCKET}
 # Required for Socket
     networks:
       socket:
