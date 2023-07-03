@@ -13,7 +13,7 @@ services:
       - no-new-privileges:true
     environment:
       - DOCKER_HOST=${SOCKET}
-# Required for Traefik
+# Required for Traefik and Socket
     networks:
       - proxy
       - socket
@@ -30,6 +30,6 @@ networks:
     external: true
   socket:
     external: true
-# Required for Traefik
+# Required for Traefik and Socket
 volumes:
   data:

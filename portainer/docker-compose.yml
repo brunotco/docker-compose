@@ -6,14 +6,15 @@ services:
     # ports:
       # - 9000:9000
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./data:/data
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-# Required for Traefik
+# Required for Traefik and Socket
     networks:
       - proxy
+      - socket
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=https"
@@ -25,4 +26,6 @@ services:
 networks:
   proxy:
     external: true
-# Required for Traefik
+  socket:
+    external: true
+# Required for Traefik and Socket
