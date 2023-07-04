@@ -35,6 +35,8 @@ services:
       # HTTP Services
       - "traefik.http.routers.wireguard.service=wireguard"
       - "traefik.http.services.wireguard.loadbalancer.server.port=${HTTP_PORT}"
+      # Middlewares
+      - "traefik.http.routers.uptime.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

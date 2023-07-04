@@ -48,6 +48,7 @@ services:
       # Middlewares
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_LOGIN}"
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
+      - "traefik.http.routers.uptime.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

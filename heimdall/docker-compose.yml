@@ -23,6 +23,8 @@ services:
       # HTTP Services
       - "traefik.http.routers.heimdall.service=heimdall"
       - "traefik.http.services.heimdall.loadbalancer.server.port=${HTTP_PORT}"
+      # Middlewares
+      - "traefik.http.routers.uptime.middlewares=chain-default@file"
 networks:
   proxy:
     external: true
