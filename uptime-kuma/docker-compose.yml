@@ -23,6 +23,8 @@ services:
       # HTTP Services
       - "traefik.http.routers.uptime.service=uptime"
       - "traefik.http.services.uptime.loadbalancer.server.port=${HTTP_PORT}"
+      # Middlewares
+      - "traefik.http.routers.uptime.middlewares=middleware-secure-headers@file"
 networks:
   proxy:
     external: true
