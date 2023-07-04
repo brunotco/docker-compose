@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.homer.service=homer"
       - "traefik.http.services.homer.loadbalancer.server.port=${HTTP_PORT}"
       # Middlewares
-      - "traefik.http.routers.uptime.middlewares=chain-default@file"
+      - "traefik.http.routers.homer.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

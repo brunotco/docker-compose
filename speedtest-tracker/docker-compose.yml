@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.speedtest.service=speedtest"
       - "traefik.http.services.speedtest.loadbalancer.server.port=${HTTP_PORT}"
       # Middlewares
-      - "traefik.http.routers.uptime.middlewares=chain-default@file"
+      - "traefik.http.routers.speedtest.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

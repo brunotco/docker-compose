@@ -24,7 +24,7 @@ services:
       - "traefik.http.routers.guacamole.service=guacamole"
       - "traefik.http.services.guacamole.loadbalancer.server.port=${HTTP_PORT}"
       # Middlewares
-      - "traefik.http.routers.uptime.middlewares=chain-default@file"
+      - "traefik.http.routers.guacamole.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

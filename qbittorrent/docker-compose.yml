@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.qbit.service=qbit"
       - "traefik.http.services.qbit.loadbalancer.server.port=${HTTP_PORT}"
       # Middlewares
-      - "traefik.http.routers.uptime.middlewares=chain-default@file"
+      - "traefik.http.routers.qbit.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

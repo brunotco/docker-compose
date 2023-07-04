@@ -30,13 +30,13 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Routers
-      - "traefik.http.routers.wireguard.entrypoints=websecure"
-      - "traefik.http.routers.wireguard.rule=Host(${HTTP_HOST})"
+      - "traefik.http.routers.wg-easy.entrypoints=websecure"
+      - "traefik.http.routers.wg-easy.rule=Host(${HTTP_HOST})"
       # HTTP Services
-      - "traefik.http.routers.wireguard.service=wireguard"
-      - "traefik.http.services.wireguard.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.http.routers.wg-easy.service=wg-easy"
+      - "traefik.http.services.wg-easy.loadbalancer.server.port=${HTTP_PORT}"
       # Middlewares
-      - "traefik.http.routers.uptime.middlewares=chain-default@file"
+      - "traefik.http.routers.wg-easy.middlewares=chain-default@file"
 networks:
   proxy:
     external: true

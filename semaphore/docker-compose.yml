@@ -30,7 +30,7 @@ services:
       - "traefik.http.routers.semaphore.service=semaphore"
       - "traefik.http.services.semaphore.loadbalancer.server.port=${HTTP_PORT}"
       # Middlewares
-      - "traefik.http.routers.uptime.middlewares=chain-default@file"
+      - "traefik.http.routers.semaphore.middlewares=chain-default@file"
 networks:
   proxy:
     external: true
