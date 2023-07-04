@@ -19,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Routers
-      - "traefik.http.routers.qbit.entrypoints=https"
+      - "traefik.http.routers.qbit.entrypoints=websecure"
       - "traefik.http.routers.qbit.rule=Host(${HTTP_HOST})"
       # HTTP Services
       - "traefik.http.routers.qbit.service=qbit"

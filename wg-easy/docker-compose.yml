@@ -30,7 +30,7 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Routers
-      - "traefik.http.routers.wireguard.entrypoints=https"
+      - "traefik.http.routers.wireguard.entrypoints=websecure"
       - "traefik.http.routers.wireguard.rule=Host(${HTTP_HOST})"
       # HTTP Services
       - "traefik.http.routers.wireguard.service=wireguard"

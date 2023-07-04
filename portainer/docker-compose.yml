@@ -18,7 +18,7 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP Routers
-      - "traefik.http.routers.portainer.entrypoints=https"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.http.routers.portainer.rule=Host(${HTTP_HOST})"
       # HTTP Services
       - "traefik.http.routers.portainer.service=portainer"
