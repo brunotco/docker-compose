@@ -21,8 +21,8 @@ services:
       - WATCHTOWER_MONITOR_ONLY=true
       # - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_SCHEDULE=0 0 0 * * SUN
-      - WATCHTOWER_NOTIFICATION_URL_FILE=/run/secrets/discord_containers
-      - DOCKER_HOST_FILE=/run/secrets/socket
+      - WATCHTOWER_NOTIFICATION_URL=/run/secrets/discord_containers
+      - DOCKER_HOST=/run/secrets/socket
 # Required for Socket
     networks:
       - socket
