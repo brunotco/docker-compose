@@ -1,9 +1,4 @@
 version: "3.1"
-secrets:
-  discord_containers:
-    file: /docker/secrets/discord_containers
-  socket:
-    file: /docker/secrets/socket
 services:
   watchtower:
     image: containrrr/watchtower:latest
@@ -13,16 +8,13 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    secrets:
-      - discord_containers
-      - socket
     environment:
       - TZ=${TZ}
       - WATCHTOWER_MONITOR_ONLY=true
       # - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_SCHEDULE=0 0 0 * * SUN
-      - WATCHTOWER_NOTIFICATION_URL=/run/secrets/discord_containers
-      - DOCKER_HOST=/run/secrets/socket
+      - WATCHTOWER_NOTIFICATION_URL=${NOTIFICATION_URL}
+      - DOCKER_HOST=${SOCKET}
 # Required for Socket
     networks:
       - socket

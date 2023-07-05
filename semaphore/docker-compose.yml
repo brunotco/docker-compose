@@ -1,9 +1,4 @@
 version: "2"
-secrets:
-  admin_pwd:
-    file: /docker/secrets/admin_pwd
-  access_key:
-    file: /docker/secrets/access_key
 services:
   semaphore:
     image: semaphoreui/semaphore:latest
@@ -15,16 +10,13 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    secrets:
-      - admin_pwd
-      - access_key
     environment:
       - SEMAPHORE_DB_DIALECT=bolt
-      - SEMAPHORE_ADMIN_PASSWORD_FILE=/run/secrets/admin_pwd
+      - SEMAPHORE_ADMIN_PASSWORD=${LOGIN_PWD}
       - SEMAPHORE_ADMIN_NAME=admin
       - SEMAPHORE_ADMIN_EMAIL=admin@localhost
       - SEMAPHORE_ADMIN=admin
-      - SEMAPHORE_ACCESS_KEY_ENCRYPTION_FILE=/run/secrets/access_key 
+      - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${ACCESS_KEY} 
       - ANSIBLE_HOST_KEY_CHECKING=false
 # Required for Traefik
     networks:

@@ -1,7 +1,4 @@
 version: "3.8"
-secrets:
-  admin_pwd:
-    file: /docker/secrets/admin_pwd
 services:
   wg-easy:
     image: weejewel/wg-easy:latest
@@ -14,11 +11,9 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    secrets:
-      - admin_pwd
     environment:
       - WG_HOST=${EXTERNAL_HOST}
-      - PASSWORD_FILE=/run/secrets/admin_pwd
+      - PASSWORD=${LOGIN_PWD}
       - WG_PORT=51820
       - WG_DEFAULT_ADDRESS=10.8.0.x
       - WG_DEFAULT_DNS=${DNS}
