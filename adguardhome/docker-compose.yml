@@ -3,22 +3,18 @@ services:
   adguardhome:
     image: adguard/adguardhome:latest
     container_name: adguardhome
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 67:67/udp
-      - 68:68/tcp
-      - 68:68/udp
-      - 784:784/udp
-      - 853:853/tcp
-      - 3000:3000/tcp
     volumes:
       - work:/opt/adguardhome/work
       - conf:/opt/adguardhome/conf
-    network_mode: host
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      vlan:
+        ipv4_address: 192.168.1.250
+networks:
+  vlan:
+    external: true
 volumes:
   work:
   conf:
