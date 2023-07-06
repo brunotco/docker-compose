@@ -1,6 +1,7 @@
 version: "2"
 services:
   adguardhome:
+    hostname: adguard
     image: adguard/adguardhome:latest
     container_name: adguardhome
     volumes:
