@@ -42,18 +42,27 @@ networks:
 The container will be created using the `macvlan` network and be assigned with the ip `192.168.1.250`, as if a separate machine in the network.
 
 ### Route configuration
-You may have some problems reaching the `macvlan` network from `lan` or `vpn`, this is a fixer for that.
+The Docker host cannot communicate with the containers on the `macvlan` and vice-versa.
+To accomplish this, a `macvlan` interface needs to be created on the Docker host and configure a route to the `macvlan` interface.
+
+In this example the device name will be `vlan-br0`, but you can give it another name.
 On the Docker host run:
 ```
-# Host macvlan bridge
+# Create the macvlan bridge interface
 sudo ip link add vlan-br0 link eth0 type macvlan mode bridge
-# Add IP for the link, has to be available
+# Assign IP to the interface, has to be available
 sudo ip addr add 192.168.1.240/32 dev vlan-br0
+# Bring the interface up
 sudo ip link set vlan-br0 up
 # Add route to all containers in macvlan subnet
 sudo ip route add 192.168.1.240/28 dev vlan-br0
 ```
 
-Change `vlan` from `vlan-br0`, if you created the network with another name, leaving `-br0`.
+This adds a link with the ip address `192.168.1.240` and adds a route to all the containers running in the `macvlanvlan` subnet.
 
-This adds a link with the ip address `192.168.1.240` and adds a route to all the containers running in the `vlan` subnet.
+You can check the route with:
+```
+ip route
+# You should see a line like this
+192.168.1.240/28 dev vlan-br0 scope link
+```
