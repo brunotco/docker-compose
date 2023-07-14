@@ -1,0 +1,32 @@
+version: "3.3"
+services:
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    volumes:
+        - config:/app/config
+    # ports:
+        # - 3000:3000
+    restart: unless-stopped
+# Required for Traefik and Socket
+    networks:
+      proxy:
+      socket:
+    labels:
+      - "traefik.enable=true"
+      # HTTP Routers
+      - "traefik.http.routers.homepage.entrypoints=websecure"
+      - "traefik.http.routers.homepage.rule=Host(${HTTP_HOST})"
+      # HTTP Services
+      - "traefik.http.routers.homepage.service=homepage"
+      - "traefik.http.services.homepage.loadbalancer.server.port=${HTTP_PORT}"
+      # Middlewares
+      - "traefik.http.routers.homepage.middlewares=chain-default@file"
+networks:
+  proxy:
+    external: true
+  socket:
+    external: true
+# Required for Traefik and Socket
+volumes:
+  config:
