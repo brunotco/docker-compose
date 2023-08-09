@@ -46,6 +46,8 @@ The Docker host cannot communicate with the containers on the `macvlan` and vice
 To accomplish this, a `macvlan` interface needs to be created on the Docker host and configure a route to the `macvlan` interface.
 
 In this example the device name will be `vlan-br0`, but you can give it another name.
+
+#### Manually (gone at reboot)
 On the Docker host run:
 ```
 # Create the macvlan bridge interface
@@ -66,3 +68,19 @@ ip route
 # You should see a line like this
 192.168.1.240/28 dev vlan-br0 scope link
 ```
+
+#### Persistent
+If you want the routing to persist after rebooting you can create a interface with the configuration.
+You can do this by creating a file with the configuration, with:
+```
+sudo nano /etc/network/interfaces.d/vlan-br0
+
+# Add this to the file
+auto vlan-br0
+iface vlan-br0 inet manual
+  pre-up /bin/ip link add vlan-br0 link eth0 type macvlan mode bridge
+  up /bin/ip addr add 192.168.1.240/32 dev vlan-br0
+  post-up /bin/ip route add 192.168.1.240/28 dev vlan-br0
+```
+
+The configuration is similar to the manual configuration, but the `Bring the interface up` command isn't required, since the interfaces do this automatically.
