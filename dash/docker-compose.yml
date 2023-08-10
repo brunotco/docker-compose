@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+  dash:
+    image: mauricenino/dashdot:latest
+    container_name: dash
+    restart: unless-stopped
+    privileged: true
+    #ports:
+      #- '3001:3001'
+    volumes:
+      - /:/mnt/host:ro
+    environment:
+      DASHDOT_PAGE_TITLE: ${TITLE}
+      DASHDOT_ENABLE_CPU_TEMPS: true
+      DASHDOT_ALWAYS_SHOW_PERCENTAGES: true
+      DASHDOT_SHOW_HOST: true
+      DASHDOT_CUSTOM_HOST: ${HOST}
+# Required for Traefik
+    networks:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      # HTTP Routers
+      - "traefik.http.routers.dash.entrypoints=websecure"
+      - "traefik.http.routers.dash.rule=Host(${HTTP_HOST})"
+      # HTTP Services
+      - "traefik.http.routers.dash.service=dash"
+      - "traefik.http.services.dash.loadbalancer.server.port=${HTTP_PORT}"
+      # Middlewares
+      - "traefik.http.routers.dash.middlewares=chain-default@file, iframes"
+      # Fixes some iframe usage problems
+      - "traefik.http.middlewares.iframes.headers.contentSecurityPolicy=frame-ancestors 'self' ${HOMARR_URL};"
+networks:
+  proxy:
+    external: true
+# Required for Traefik

@@ -1,0 +1,35 @@
+version: "3"
+services:
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
+    volumes:
+      - configs:/app/data/configs
+      - icons:/app/public/icons
+    restart: unless-stopped
+    environment:
+      - DOCKER_HOST=tcp://socket-proxy
+      - DOCKER_PORT=2375
+# Required for Traefik and Socket
+    networks:
+      proxy:
+      socket:
+    labels:
+      - "traefik.enable=true"
+      # HTTP Routers
+      - "traefik.http.routers.homarr.entrypoints=websecure"
+      - "traefik.http.routers.homarr.rule=Host(${HTTP_HOST})"
+      # HTTP Services
+      - "traefik.http.routers.homarr.service=homarr"
+      - "traefik.http.services.homarr.loadbalancer.server.port=${HTTP_PORT}"
+      # Middlewares
+      - "traefik.http.routers.emby.middlewares=chain-default@file"
+networks:
+  proxy:
+    external: true
+  socket:
+    external: true
+# Required for Traefik and Socket
+volumes:
+  configs:
+  icons:
